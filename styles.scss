@@ -1,0 +1,179 @@
+@use "sass:math";
+
+body {
+  margin: 0;
+  min-height: 500vh;
+}
+
+.full-page {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  border: 1px solid red;
+}
+
+$triangle-size: 50px;
+
+@for $x from 0 through 50 {
+  @for $y from 0 through 50 {
+    $start: 0% + math.random() * 50;
+    $end: 100% - math.random() * 50;
+    //@debug $start;
+    @keyframes triangle-fade--#{$x}-#{$y} {
+      0% {
+        display: block;
+        opacity: 0;
+      }
+      // Randomly start
+      #{$start} {
+        display: block;
+        opacity: 0;
+      }
+
+      #{$end} {
+        display: block;
+        opacity: 1;
+      }
+      100% {
+        display: block;
+        opacity: 1;
+      }
+    }
+    .triangle--#{$x}-#{$y} {
+      position: fixed;
+
+      left: ($x - 1) * $triangle-size;
+      top: $y * $triangle-size * math.sqrt(3);
+
+      border-right: $triangle-size solid transparent;
+      border-left: $triangle-size solid transparent;
+
+      @if ($x + $y) % 2 == 0 {
+        border-top: $triangle-size * math.sqrt(3) solid black;
+      } @else {
+        border-bottom: $triangle-size * math.sqrt(3) solid black;
+      }
+
+      animation: triangle-fade--#{$x}-#{$y} 0.5s forwards;
+      animation-play-state: paused;
+      animation-delay: calc(var(--scroll) * -1s);
+    }
+  }
+}
+
+.header {
+  @extend .full-page;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  animation: header-fade 0.5s forwards;
+  animation-play-state: paused;
+  animation-delay: calc(var(--scroll) * -1s);
+}
+
+@keyframes header-fade {
+  0% {
+    display: block;
+    opacity: 1;
+  }
+
+  100% {
+    display: block;
+    opacity: 0;
+  }
+}
+
+/*
+.door {
+  position: fixed;
+  top: 0;
+  left: -50%;
+  width: 50%;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+
+  animation: doorMove 0.5s forwards;
+  animation-play-state: paused;
+  animation-delay: calc(var(--scroll) * -1s);
+}
+
+.content-1 {
+  position: absolute;
+  border: 1px solid red;
+  color: white;
+
+  animation: content1Fade 0.5s forwards;
+  animation-play-state: paused;
+  animation-delay: calc(var(--scroll) * -1s);
+}
+
+.content-2 {
+  position: absolute;
+
+  animation: content2Fade 0.5s forwards;
+  animation-play-state: paused;
+  animation-delay: calc(var(--scroll) * -1s);
+}
+*/
+@keyframes doorMove {
+  0% {
+    transform: translateX(0%);
+  }
+  25%,
+  50% {
+    transform: translateX(100%);
+  }
+  75%,
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes content1Fade {
+  0% {
+    opacity: 0;
+    //color: rgba(255, 255, 255, 1);
+  }
+  25% {
+    opacity: 1;
+    //color: rgba(255, 255, 255, 1);
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes moveInFromLeft {
+  0% {
+    transform: translateX(0%);
+  }
+  25% {
+    color: rgba(255, 255, 255, 0);
+  }
+  50% {
+    transform: translateX(100%);
+    color: rgba(255, 255, 255, 1);
+  }
+}
+
+@keyframes moveInFromRight {
+  0% {
+    transform: translateX(0%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  75% {
+    color: rgba(255, 255, 255, 0);
+  }
+  100% {
+    transform: translateX(-100%);
+    color: rgba(255, 255, 255, 1);
+  }
+}
